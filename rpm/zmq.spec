@@ -6,7 +6,8 @@ License: LGPL
 Group: Libraries/Network
 URL: zeromq.org
 
-Source: https://github.com/zeromq/libzmq/releases/download/v4.2.2/zeromq-4.2.2.tar.gz
+#Source: https://github.com/zeromq/libzmq/releases/download/v4.2.2/zeromq-4.2.2.tar.gz
+Source: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
 BuildRequires: gcc libtool
@@ -32,7 +33,7 @@ Requires: %{name} = %{version}
 The package provides command line tools to test basic operations of ZeroMQ
 
 %prep
-%setup -q -n libzmq-%{version}
+%setup -q -n %{name}-%{version}/libzmq
 
 %build
 %{__make} clean || true
