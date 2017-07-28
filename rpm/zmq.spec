@@ -9,7 +9,7 @@ URL: zeromq.org
 Source: https://github.com/zeromq/libzmq/releases/download/v4.2.2/zeromq-4.2.2.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-BuildRequires: gcc
+BuildRequires: gcc libtool
 
 %description
 The ZeroMQ lightweight messaging kernel is a library which extends the standard socket interfaces with features traditionally provided by specialised messaging middleware products. ZeroMQ sockets provide an abstraction of asynchronous message queues, multiple messaging patterns, message filtering (subscriptions), seamless access to multiple transport protocols and more.
@@ -32,10 +32,12 @@ Requires: %{name} = %{version}
 The package provides command line tools to test basic operations of ZeroMQ
 
 %prep
-%setup
+%setup -q -n libzmq-%{version}
 
 %build
 %{__make} clean || true
+
+./autogen.sh
 
 CFLAGS="$CFLAGS -fPIC"
 CXXFLAGS="$CXXFLAGS -fPIC"
@@ -52,7 +54,9 @@ CXXFLAGS="$CXXFLAGS -fPIC"
 
 %pre
 
-%post
+%post -n libzmq -p /sbin/ldconfig
+
+%postun -n libzmq -p /sbin/ldconfig
 
 %files
 %files
@@ -66,8 +70,8 @@ CXXFLAGS="$CXXFLAGS -fPIC"
 %{_libdir}/libzmq.a
 %{_libdir}/libzmq.la
 %{_libdir}/pkgconfig/libzmq.pc
-%{_mandir}/man3/*
-%{_mandir}/man7/*
+#%{_mandir}/man3/*
+#%{_mandir}/man7/*
 
 %files tools
 %defattr(-, root, root, 0755)
